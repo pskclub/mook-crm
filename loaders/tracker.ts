@@ -1,5 +1,4 @@
-import { useSupabaseClient } from '#imports'
-import { type IStatus } from '#core/types/lib'
+import { useAPIList } from '~/composables/api'
 
 export interface ITrackerItem {
   id: string
@@ -13,26 +12,11 @@ export interface ITrackerItem {
 }
 
 export const useTracker = () => {
-  const supabase = useSupabaseClient()
-  const items = ref<ITrackerItem[]>([])
-  const status = ref<IStatus>(ObjectHelper.createStatus())
-
-  const run = async () => {
-    status.value = ObjectHelper.toLoadingStatus(status.value)
-    const res = await supabase
-      .from('trackers')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (res.error) {
-      status.value = ObjectHelper.toErrorStatus(status.value, res.error)
-    } else {
-      items.value = res.data
-      status.value = ObjectHelper.toSuccessStatus(status.value)
-    }
-
-    status.value = ObjectHelper.toCompleteStatus(status.value)
-  }
-
-  return { items, status, run }
+  return useAPIList<ITrackerItem>({
+    endpoint: 'trackers',
+    sort: {
+      column: 'created_at',
+      ascending: true,
+    },
+  })
 }

@@ -19,6 +19,6 @@ import { useTracker } from '~/loaders/tracker'
 const tracker = useTracker()
 
 onMounted(() => {
-  tracker.run()
+  tracker.fetch()
 })
 </script>
