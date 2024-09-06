@@ -1,6 +1,6 @@
 <template>
   <Log :data-items="[allTracker.items.value, allTracker.status.value]" />
-  <div class="flex">
+  <div class="md:flex">
     <div class="mr-4">
       <p class="mb-4 text-xl font-bold">ปฏิทิน</p>
       <Datepicker
@@ -12,7 +12,7 @@
         :max-date="new Date()"
       />
     </div>
-    <div class="grid flex-1 grid-cols-2 gap-4">
+    <div class="grid flex-1 gap-4 md:grid-cols-2">
       <div>
         <p class="text-xl font-bold">ของฉัน</p>
         <div class="mt-4 grid grid-cols-1 gap-4">
