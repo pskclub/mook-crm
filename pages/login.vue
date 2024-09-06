@@ -33,6 +33,8 @@ useApp().definePage({
 
 const dialog = useDialog()
 const router = useRouter()
+const supabase = useSupabaseClient()
+
 const form = useForm({
   validationSchema: toTypedSchema(
     z.object({
