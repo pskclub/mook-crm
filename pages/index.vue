@@ -1,11 +1,10 @@
 <template>
-  <div>
-    {{ useSupabaseSession().value }}
-  </div>
+  <Home />
 </template>
 <script lang="ts" setup>
-import { useApp, useSupabaseSession } from '#imports'
+import { useApp } from '#imports'
 import { routes } from '~/constants/routes'
+import Home from '~/features/Home/index.vue'
 
 definePageMeta({
   layout: 'default',
