@@ -50,7 +50,9 @@
         </div>
 
         <p class="mt-4 whitespace-pre-line text-sm text-gray-900" v-html="item.detail.trim()" />
-        <p class="mt-4 text-xs text-gray-500">By {{ item.profiles.display_name }}</p>
+        <p class="mt-4 text-xs text-gray-500">
+          By {{ item.profiles.display_name }} ({{ item.profiles.team }})
+        </p>
       </div>
     </div>
   </Card>
