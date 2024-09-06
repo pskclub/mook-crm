@@ -91,6 +91,7 @@ const form = useForm({
     })
   ),
   initialValues: props.item,
+  keepValuesOnUnmount: true,
 })
 
 const onDelete = () => {
