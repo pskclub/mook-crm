@@ -11,6 +11,7 @@ import { selectMenu } from '#core/ui.config/selectMenu'
 import { textarea } from '#core/ui.config/textarea'
 import { toggle } from '#core/ui.config/toggle'
 import { notification } from '#core/ui.config/notification'
+
 // Configs here will be merged with the default config
 export default defineAppConfig<AppConfigInput>({
   core: {
@@ -35,5 +36,8 @@ export default defineAppConfig<AppConfigInput>({
     textarea,
     toggle,
     notification,
+    notifications: {
+      position: 'top-0 end-0',
+    },
   },
 })

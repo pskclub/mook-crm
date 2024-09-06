@@ -19,7 +19,7 @@ import { INPUT_TYPES } from '#core/components/Form/types'
 import * as z from 'zod'
 
 definePageMeta({
-  layout: 'default',
+  layout: 'none',
 })
 
 useApp().defineSEO({

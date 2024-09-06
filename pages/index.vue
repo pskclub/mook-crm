@@ -6,10 +6,6 @@ import { useApp } from '#imports'
 import { routes } from '~/constants/routes'
 import Home from '~/features/Home/index.vue'
 
-definePageMeta({
-  layout: 'default',
-})
-
 useApp().defineSEO({
   title: routes.home.name,
   description: routes.home.name,
