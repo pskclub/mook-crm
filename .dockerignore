@@ -1,0 +1,24 @@
+# Ignore Node modules
+node_modules/
+
+# Ignore Nuxt build output
+.output/
+.nuxt/
+dist/
+
+# Ignore environment files
+.env
+
+# Ignore logs
+*.log
+
+# Ignore version control directories
+.git/
+.svn/
+
+# Ignore IDE and editor directories
+.idea/
+.vscode/
+
+# Ignore macOS system files
+.DS_Store

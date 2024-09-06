@@ -1,0 +1,44 @@
+{
+  "name": "nuxt3-template-with-uikit",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt prepare && nuxt build",
+    "dev": "nuxt dev -o",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --fix --cache",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "prepare": "husky install",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxtjs/google-fonts": "^3.2.0"
+  },
+  "devDependencies": {
+    "@finema/core": "^1.4.186",
+    "@finema/eslint-config": "^1.2.0",
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/supabase": "^1.4.0",
+    "@types/eslint": "^8",
+    "eslint": "^8.55.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "nuxt": "^3.13.1",
+    "postcss-custom-properties": "^13.3.4",
+    "prettier": "^3.1.1",
+    "sass": "^1.71.1",
+    "vitest": "^1.6.0",
+    "vue-router": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,vue,tsx,js}": "eslint --fix --cache",
+    "*.{html,json}": "prettier --write"
+  },
+  "packageManager": "yarn@4.4.1"
+}
