@@ -1,5 +1,5 @@
 <template>
-  <Card size="xs" class="flex items-center justify-between">
+  <div class="flex items-center justify-between p-4">
     <Modal v-model="isShowEditModal" title="แก้ไข">
       <Form @submit="onSubmit">
         <FormFields :options="formFields" class="grid grid-cols-2 gap-4" />
@@ -11,18 +11,7 @@
       </Form>
     </Modal>
     <div class="flex-1 truncate">
-      <div class="border-gray flex border-b pb-3">
-        <div class="mr-3">
-          <UAvatar size="md" :alt="avatarALT" />
-        </div>
-        <div class="flex w-full flex-col">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">
-            {{ item.profiles.display_name }}
-          </h3>
-          <p class="text-xs uppercase text-gray-500">{{ item.profiles.team }}</p>
-        </div>
-      </div>
-      <div class="mt-3">
+      <div class="flex flex-col">
         <div class="flex justify-between">
           <div class="flex items-center space-x-3">
             <Badge :ui="{ rounded: 'rounded-full' }" variant="subtle" color="success" size="sm">
@@ -65,10 +54,11 @@
             </div>
           </div>
         </div>
+
         <p class="mt-4 whitespace-pre-line text-sm text-gray-600" v-html="item.detail.trim()" />
       </div>
     </div>
-  </Card>
+  </div>
 </template>
 <script lang="ts" setup>
 import {
@@ -220,19 +210,5 @@ const formFields = createFormFields(() => [
 
 const onSubmit = form.handleSubmit((values) => {
   trackerUpdate.update(props.item.id, values)
-})
-
-const avatarALT = computed(() => {
-  const searchDotName = props.item.profiles.display_name.replace('.co', 'co')
-
-  if (searchDotName.includes('.')) {
-    const firstChar = props.item.profiles.display_name.charAt(0).toUpperCase()
-    const afterDotChar =
-      props.item.profiles.display_name.split('.')[1]?.charAt(0).toUpperCase() || ''
-
-    return firstChar + ' ' + afterDotChar
-  }
-
-  return props.item.profiles.display_name.substring(0, 2).split('').join(' ').toUpperCase()
 })
 </script>

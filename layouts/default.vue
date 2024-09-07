@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-full">
+    <Log :data="user" />
     <nav class="border-b border-gray-200 bg-white">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
@@ -23,7 +24,9 @@
           <div class="ml-6 flex items-center">
             <Dropdown :items="userItems" :popper="{ placement: 'bottom-end' }">
               <div class="flex items-center">
-                <p>{{ user?.email }}</p>
+                <p class="font-bold">
+                  {{ user?.email }}
+                </p>
                 <Icon name="ph:caret-down-light" class="ml-2" />
               </div>
             </Dropdown>

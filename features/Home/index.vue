@@ -1,5 +1,5 @@
 <template>
-  <Log :data-items="[allTracker.items.value, allTracker.status.value]" />
+  <Log :data-items="[allTracker.items.value, allTracker.byProfileItems.value]" />
   <div class="md:flex">
     <div class="mr-4">
       <p class="mb-4 text-xl font-bold">ปฏิทิน</p>
@@ -19,21 +19,23 @@
           <Card size="xs">
             <Form @submit="onSubmit">
               <FormFields :options="formFields" :form="form" class="grid grid-cols-2 gap-4" />
-              <div class="mt-6">
+              <div class="mt-4">
                 <Button
                   size="sm"
                   type="submit"
                   block
                   :loading="trackerCreate.status.value.isLoading"
-                  >สร้าง</Button>
+                >
+                  สร้าง
+                </Button>
               </div>
             </Form>
           </Card>
           <Loader :is-loading="myTracker.status.value.isLoading">
             <TrackerItemEmpty v-if="myTracker.items.value.length === 0" />
-            <TrackerItem
-              v-for="item in myTracker.items.value"
-              :key="item.id"
+            <TrackerGroupItem
+              v-for="item in myTracker.byProfileItems.value"
+              :key="item.profile.id"
               :item="item"
               editable
               @delete="onDelete"
@@ -47,7 +49,11 @@
         <div class="mt-4 grid grid-cols-1 gap-4">
           <Loader :is-loading="allTracker.status.value.isLoading">
             <TrackerItemEmpty v-if="allTracker.items.value.length === 0" />
-            <TrackerItem v-for="item in allTracker.items.value" :key="item.id" :item="item" />
+            <TrackerGroupItem
+              v-for="item in allTracker.byProfileItems.value"
+              :key="item.profile.id"
+              :item="item"
+            />
           </Loader>
         </div>
       </div>
@@ -59,7 +65,6 @@ import { type ITrackerItem, useProject, useTracker, useTrackerCreate } from '~/l
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { useWatchChange } from '#imports'
-import TrackerItem from '~/components/TrackerItem.vue'
 import { INPUT_TYPES } from '#core/components/Form/types'
 import * as z from 'zod'
 

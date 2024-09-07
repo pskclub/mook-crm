@@ -31,8 +31,14 @@ export interface IProfileItem {
   code: string
 }
 
+export interface ITrackerGroupByProfileItem {
+  profile: ITrackerItem['profiles']
+  totalTiming: number
+  items: ITrackerItem[]
+}
+
 export const useTracker = () => {
-  return useAPIList<ITrackerItem>({
+  const loader = useAPIList<ITrackerItem>({
     endpoint: 'trackers',
     select: '*,projects(*),profiles(*)',
     sort: {
@@ -40,6 +46,35 @@ export const useTracker = () => {
       ascending: false,
     },
   })
+
+  const byProfileItems = computed<ITrackerGroupByProfileItem[]>(() => {
+    const groupedObject = loader.items.value.reduce(
+      (acc: Record<string, ITrackerGroupByProfileItem>, item: ITrackerItem) => {
+        const profileId = item.profiles.id
+
+        if (!acc[profileId]) {
+          acc[profileId] = {
+            profile: item.profiles,
+            items: [],
+            totalTiming: 0,
+          }
+        }
+
+        acc[profileId].items.push(item)
+        acc[profileId].totalTiming += item.timing
+
+        return acc
+      },
+      {}
+    )
+
+    return Object.values(groupedObject)
+  })
+
+  return {
+    ...loader,
+    byProfileItems,
+  }
 }
 
 export const useTrackerCreate = () => {
