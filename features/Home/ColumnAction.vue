@@ -1,0 +1,198 @@
+<template>
+  <Modal v-model="isShowViewModal" :title="item.name">
+    <div v-if="item.detail" class="mb-4">
+      <p class="break-words text-xs text-gray-600 dark:text-gray-400">
+        {{ item.detail }}
+      </p>
+    </div>
+    <div class="mb-4 space-y-2">
+      <KeyValueDisplay label="รหัส" :value="item.code" />
+      <KeyValueDisplay
+        v-if="item.product_categories"
+        label="หมวดหมู่"
+        :value="item.product_categories?.name"
+      />
+      <KeyValueDisplay label="ราคาขาย" :value="item.price" format-type="fixed" suffix="฿" />
+
+      <KeyValueDisplay
+        label="ราคา+ค่าดำเนินการ"
+        :value="item.price_plus"
+        format-type="fixed"
+        suffix="฿"
+      />
+
+      <KeyValueDisplay
+        label="คงเหลือ"
+        :value="item.qty"
+        format-type="comma"
+        suffix="ชิ้น"
+        is-badge
+      />
+      <div v-if="item.product_files?.length">
+        <hr class="my-6" />
+        <p class="mb-4 text-lg font-bold">รายการแนบไฟล์</p>
+        <ul role="list" class="divide-y divide-gray-100 rounded-md border border-gray-200">
+          <li
+            v-for="file in item.product_files"
+            :key="file.id"
+            class="flex items-center justify-between py-4 pl-4 pr-5 text-sm/6"
+          >
+            <div class="flex w-0 flex-1 items-center">
+              <icon name="ph:file" class="size-5 shrink-0 text-gray-400" aria-hidden="true" />
+              <div class="ml-4 flex min-w-0 flex-1 gap-2">
+                <span class="truncate font-medium">{{ file.name }}</span>
+              </div>
+            </div>
+            <div class="ml-4 shrink-0">
+              <a
+                target="_blank"
+                :href="`https://crmur.10bitdevelopment.com/select2services/files/DownloadFile/${file.path}`"
+                class="text-primary-600 hover:text-primary-500 font-medium"
+                >ดาวน์โหลด</a
+              >
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Creation Date -->
+    <div class="text-right">
+      <span class="text-xs text-gray-500 dark:text-gray-400">
+        สร้างเมื่อ {{ TimeHelper.displayDateTime(item.created_at) }}
+      </span>
+    </div>
+  </Modal>
+  <Modal v-model="isShowEditModal" :title="item.name">
+    <Form @submit.prevent="onSubmit">
+      <FormFields :form="form" :options="formFields" />
+      <div class="mt-4 flex justify-end">
+        <Button type="submit" block>แก้ไข</Button>
+      </div>
+    </Form>
+  </Modal>
+  <div class="flex items-center space-x-3">
+    <Button icon="ph:note-pencil" square color="white" @click="isShowEditModal = true" />
+    <Button icon="ph:eye" square color="white" @click="isShowViewModal = true" />
+  </div>
+</template>
+<script lang="ts" setup>
+import {
+  type IProductItem,
+  useProductCategoryListLoader,
+  useProductPageLoader,
+} from '~/loaders/product'
+import * as z from 'zod'
+import { INPUT_TYPES } from '#core/components/Form/types'
+
+const props = defineProps<{
+  item: IProductItem
+}>()
+
+const isShowViewModal = ref(false)
+const isShowEditModal = ref(false)
+
+const product = useProductPageLoader()
+const category = useProductCategoryListLoader()
+const dialog = useDialog()
+
+const form = useForm({
+  validationSchema: toTypedSchema(
+    z.object({
+      name: z.string().min(1, 'กรุณากรอกชื่อ'),
+      detail: z.string().min(1, 'กรุณากรอกรายละเอียด'),
+      code: z.string().min(1, 'กรุณากรอกรหัสสินค้า'),
+      price: z.number().optional(),
+      price_plus: z.number().optional(),
+      qty: z.number().optional(),
+      category_id: z.number().optional().nullable(),
+    })
+  ),
+  initialValues: props.item,
+  keepValuesOnUnmount: true,
+})
+
+const formFields = createFormFields(() => [
+  {
+    type: INPUT_TYPES.TEXT,
+    props: {
+      name: 'name',
+      label: 'ชื่อ',
+    },
+  },
+  {
+    type: INPUT_TYPES.SELECT,
+    props: {
+      name: 'category_id',
+      label: 'หมวดหมู่',
+      options: category.fetchItems.map((item) => ({
+        label: item.name,
+        value: item.id,
+      })),
+      clearable: true,
+    },
+  },
+  {
+    type: INPUT_TYPES.TEXTAREA,
+    props: {
+      name: 'detail',
+      label: 'รายละเอียด',
+    },
+  },
+  {
+    type: INPUT_TYPES.TEXT,
+    props: {
+      name: 'code',
+      label: 'รหัสสินค้า',
+    },
+  },
+  {
+    type: INPUT_TYPES.NUMBER,
+    props: {
+      name: 'price',
+      label: 'ราคาขาย',
+    },
+  },
+  {
+    type: INPUT_TYPES.NUMBER,
+    props: {
+      name: 'price_plus',
+      label: 'ราคา+ค่าดำเนินการ',
+    },
+  },
+  {
+    type: INPUT_TYPES.NUMBER,
+    props: {
+      name: 'qty',
+      label: 'จำนวนคงเหลือ',
+    },
+  },
+])
+
+const onSubmit = form.handleSubmit(async (values) => {
+  product.update(props.item.id as any, values)
+})
+
+watch(
+  () => product.updateStatus.value.isSuccess,
+  () => {
+    dialog.success({
+      title: 'แก้ไขสำเร็จ',
+      description: 'แก้ไขสินค้าสำเร็จ',
+    })
+
+    product.fetch()
+    isShowEditModal.value = false
+  }
+)
+
+watch(
+  () => product.updateStatus.value.isError,
+  () => {
+    dialog.error({
+      title: 'เกิดข้อผิดพลาด',
+      description: StringHelper.getError(product.updateStatus.value.errorData),
+    })
+  }
+)
+</script>

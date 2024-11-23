@@ -1,7 +1,11 @@
 <template>
   <Container size="xs" class="my-6 flex h-full flex-1 items-center justify-center">
     <Card class="flex w-full flex-col" size="sm">
-      <img src="/images/logo-m.png" alt="" class="mx-auto w-[110px]" />
+      <img
+        src="https://crmur.10bitdevelopment.com/Images/Logo/logo.png"
+        alt=""
+        class="mx-auto w-[110px]"
+      />
       <p class="text-primary mx-auto my-4 text-2xl font-bold">เข้าสู่ระบบ</p>
       <Form @submit="onSubmit">
         <FormFields :options="formFields" />

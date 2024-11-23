@@ -15,8 +15,12 @@ import { notification } from '#core/ui.config/notification'
 // Configs here will be merged with the default config
 export default defineAppConfig<AppConfigInput>({
   core: {
-    limit_per_page: 15,
+    limit_per_page: 30,
     date_format: 'dd-MM-yyyy',
+    date_time_format: 'dd MMM yyyy HH:mm',
+    time_format: 'HH:mm',
+    is_thai_year: true,
+    is_thai_month: true,
     site_name: SITE.TITLE,
   },
   ui: {

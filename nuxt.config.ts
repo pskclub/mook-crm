@@ -18,6 +18,13 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: SITE.TITLE,
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: 'https://crmur.10bitdevelopment.com/Images/Logo/favicon.ico',
+        },
+      ],
     },
   },
   googleFonts: {

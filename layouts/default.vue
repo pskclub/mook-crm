@@ -6,8 +6,16 @@
         <div class="flex h-16 justify-between">
           <div class="flex">
             <div class="flex shrink-0 items-center">
-              <img class="block h-8 w-auto lg:hidden" src="/images/logo.png" alt="Your Company" />
-              <img class="hidden h-8 w-auto lg:block" src="/images/logo.png" alt="Your Company" />
+              <img
+                class="block h-8 w-auto lg:hidden"
+                src="https://crmur.10bitdevelopment.com/Images/Logo/logo.png"
+                alt="Your Company"
+              />
+              <img
+                class="hidden h-8 w-auto lg:block"
+                src="https://crmur.10bitdevelopment.com/Images/Logo/logo.png"
+                alt="Your Company"
+              />
             </div>
             <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
               <ULink
@@ -54,7 +62,7 @@ const user = useSupabaseUser()
 const supabase = useSupabaseClient()
 const router = useRouter()
 
-const navbarItems = [routes.home]
+const navbarItems = [routes.home, routes.categories]
 
 const userItems: DropdownItem[][] = [
   [

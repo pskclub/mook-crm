@@ -2,5 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "app";
-
+html {
+  @apply font-noto bg-[#F5F5F5];
+}

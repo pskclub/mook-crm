@@ -1,5 +1,7 @@
 import { type AxiosRequestConfig } from 'axios'
 import { useRuntimeConfig } from '#app'
+import { SITE } from '~/constants/site'
+import { useSupabaseSession } from '#build/imports'
 
 export const useRequestOptions = () => {
   const config = useRuntimeConfig()
@@ -11,8 +13,14 @@ export const useRequestOptions = () => {
   }
 
   const getDefault = (): Omit<AxiosRequestConfig, 'baseURL'> & { baseURL: string } => {
+    const session = useSupabaseSession()
+
     return {
       baseURL: config.public.baseAPI,
+      headers: {
+        Apikey: SITE.API_KEY,
+        Authorization: `Bearer ${session.value?.access_token}`,
+      },
     }
   }
 

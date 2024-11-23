@@ -1,6 +1,6 @@
 export const SITE = {
-  TITLE: 'FINEMA Daily',
-  BASE_API: 'https://kpiosljpehkdmjsxagyk.supabase.co',
+  TITLE: 'บริษัท อัพไรท์ ซิมมูเลชั่น จำกัด',
+  BASE_API: 'https://eaalzoxnmypyexmcvofh.supabase.co',
   API_KEY:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtwaW9zbGpwZWhrZG1qc3hhZ3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0NjU2NTcsImV4cCI6MjA0MTA0MTY1N30.eo2s0dfQPFQ0Xbqry-I_ygXyGGqtmCjdK4T8pjC8It8',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhYWx6b3hubXlweWV4bWN2b2ZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIxMzU2MDQsImV4cCI6MjA0NzcxMTYwNH0.J7cYCvKnFA05PXI7QZDCWCHW6DczFa8T2G3ocaRKtC8',
 }

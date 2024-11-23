@@ -7,4 +7,8 @@ export const routes = {
     to: '/login',
     name: 'เข้าสู่ระบบ',
   },
+  categories: {
+    to: '/categories',
+    name: 'หมวดหมู่',
+  },
 }
