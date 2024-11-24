@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   supabase: {
     url: SITE.BASE_API,
     key: SITE.API_KEY,
+    redirect: false,
   },
   app: {
     head: {

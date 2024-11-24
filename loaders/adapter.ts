@@ -124,10 +124,10 @@ export const createSupabaseAdapter = (
       }
     } else if (method.toLowerCase() === 'post') {
       // ObjectLoader case for POST
-      result = await supabase.from(tableName).insert(JSON.parse(data))
+      result = await supabase.from(tableName).insert(JSON.parse(data)).select()
 
       return {
-        data,
+        data: result.data?.[0] || null,
         status: 200,
         statusText: 'OK',
         headers: {},
@@ -135,7 +135,11 @@ export const createSupabaseAdapter = (
       }
     } else if (method.toLowerCase() === 'put') {
       // ObjectLoader case for PUT
-      result = await supabase.from(url.split('/')[1]).update(JSON.parse(data)).eq('id', tableName)
+      result = await supabase
+        .from(url.split('/')[1])
+        .update(JSON.parse(data))
+        .eq('id', tableName)
+        .select()
 
       return {
         data: result.data?.[0] || null,

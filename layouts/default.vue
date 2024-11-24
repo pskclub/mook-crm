@@ -7,13 +7,13 @@
           <div class="flex">
             <div class="flex shrink-0 items-center">
               <img
-                class="block h-8 w-auto lg:hidden"
-                src="https://crmur.10bitdevelopment.com/Images/Logo/logo.png"
+                class="block h-8 w-auto rounded-full lg:hidden"
+                src="/images/logo.jpg"
                 alt="Your Company"
               />
               <img
-                class="hidden h-8 w-auto lg:block"
-                src="https://crmur.10bitdevelopment.com/Images/Logo/logo.png"
+                class="hidden h-8 w-auto rounded-full lg:block"
+                src="/images/logo.jpg"
                 alt="Your Company"
               />
             </div>
@@ -30,14 +30,26 @@
             </div>
           </div>
           <div class="ml-6 flex items-center">
-            <Dropdown :items="userItems" :popper="{ placement: 'bottom-end' }">
+            <Dropdown
+              v-if="session?.access_token"
+              :items="userItems"
+              :popper="{ placement: 'bottom-end' }"
+            >
               <div class="flex items-center">
-                <p class="font-bold">
+                <p class="font-semibold">
                   {{ user?.email }}
                 </p>
                 <Icon name="ph:caret-down-light" class="ml-2" />
               </div>
             </Dropdown>
+            <div v-else>
+              <ULink
+                :to="routes.login.to"
+                inactive-class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+              >
+                เข้าสู่ระบบ
+              </ULink>
+            </div>
           </div>
         </div>
       </div>
@@ -57,9 +69,9 @@ import { useSupabaseUser } from '#imports'
 import { routes } from '~/constants/routes'
 import { type DropdownItem } from '#ui/types'
 
-const app = useApp()
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
+const session = useSupabaseSession()
 const router = useRouter()
 
 const navbarItems = [routes.home, routes.categories]
@@ -70,7 +82,7 @@ const userItems: DropdownItem[][] = [
       label: 'ออกจากระบบ',
       click: () => {
         supabase.auth.signOut().finally(() => {
-          router.push(routes.login.to)
+          router.push(routes.home.to)
         })
       },
     },

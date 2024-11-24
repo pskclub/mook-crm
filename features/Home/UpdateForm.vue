@@ -31,7 +31,7 @@ const form = useForm({
       price: z.number().optional(),
       price_plus: z.number().optional(),
       qty: z.number().optional(),
-      category_id: z.number().optional(),
+      category_id: z.number().optional().nullable(),
     })
   ),
   initialValues: props.item,

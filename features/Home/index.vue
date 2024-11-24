@@ -9,7 +9,9 @@
         :options="filterFields"
         class="grid grid-cols-2 gap-4 md:grid-cols-4"
       />
-      <Button icon="ph:upload" @click="isShowImportModal = true"> นำเข้าข้อมูล </Button>
+      <Button v-if="session?.access_token" icon="ph:upload" @click="isShowImportModal = true">
+        นำเข้าข้อมูล
+      </Button>
     </Form>
     <Table :options="tableOptions" @page-change="product.fetch">
       <template #action-data="{ row }">
@@ -25,7 +27,9 @@ import ColumnAction from '~/features/Home/ColumnAction.vue'
 import Import from '~/features/Home/Import.vue'
 import * as z from 'zod'
 import { INPUT_TYPES } from '#core/components/Form/types'
+import { useSupabaseSession } from '#build/imports'
 
+const session = useSupabaseSession()
 const product = useProductPageLoader()
 const category = useProductCategoryListLoader()
 const isShowImportModal = ref(false)

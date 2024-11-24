@@ -1,11 +1,9 @@
 <template>
   <Container size="xs" class="my-6 flex h-full flex-1 items-center justify-center">
     <Card class="flex w-full flex-col" size="sm">
-      <img
-        src="https://crmur.10bitdevelopment.com/Images/Logo/logo.png"
-        alt=""
-        class="mx-auto w-[110px]"
-      />
+      <NuxtLink :to="routes.home.to">
+        <img src="/images/logo.jpg" alt="" class="mx-auto w-[110px] rounded-full" />
+      </NuxtLink>
       <p class="text-primary mx-auto my-4 text-2xl font-bold">เข้าสู่ระบบ</p>
       <Form @submit="onSubmit">
         <FormFields :options="formFields" />
@@ -13,6 +11,7 @@
           <Button type="submit" block> เข้าสู่ระบบ </Button>
         </div>
       </Form>
+      <NuxtLink class="mt-8 text-center text-sm text-gray-400" :to="routes.home.to">กลับสู่หน้าหลัก</NuxtLink>
     </Card>
   </Container>
 </template>

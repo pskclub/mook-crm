@@ -55,7 +55,7 @@
           </li>
         </ul>
       </div>
-      <UpdateForm :item="item" @done="isShowViewModal = false" />
+      <UpdateForm v-if="session?.access_token" :item="item" @done="isShowViewModal = false" />
     </div>
 
     <!-- Creation Date -->
@@ -67,7 +67,7 @@
   </Modal>
   <div class="flex items-center space-x-3">
     <Button icon="ph:eye" square color="white" @click="isShowViewModal = true" />
-    <Button icon="ph:trash" square color="white" @click="onDelete" />
+    <Button v-if="session?.access_token" icon="ph:trash" square color="white" @click="onDelete" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -81,6 +81,7 @@ const props = defineProps<{
 
 const isShowViewModal = ref(false)
 const dialog = useDialog()
+const session = useSupabaseSession()
 const product = useProductPageLoader()
 
 const onDelete = () => {

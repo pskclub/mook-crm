@@ -6,6 +6,10 @@ import { useApp } from '#imports'
 import { routes } from '~/constants/routes'
 import Categories from '~/features/Categories/index.vue'
 
+definePageMeta({
+  middleware: 'auth',
+})
+
 useApp().defineSEO({
   title: routes.categories.name,
   description: routes.categories.name,
