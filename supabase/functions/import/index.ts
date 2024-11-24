@@ -34,11 +34,11 @@ const transformProduct = (origin: IProductOriginItem): Omit<IProductItem, 'creat
     id: origin.RID,
     name: origin.ModelName,
     code: origin.ItemNo,
-    detail: `${
-      origin.ItemDetail || ''
-    }\nBrand: ${origin.BrandNameTH}\nGroup: ${origin.Group?.GroupName}\nType: ${origin.Type?.TypeName}`,
+    detail: `${origin.ItemDetail || ''}`,
     price: basePrice,
     price_plus: plusPrice,
+    group_id: origin.Group?.RID,
+    type_id: origin.Type?.RID,
     qty: totalQty,
   }
 }

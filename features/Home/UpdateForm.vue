@@ -1,6 +1,6 @@
 <template>
-  <Form @submit.prevent="onSubmit">
-    <FormFields :form="form" :options="formFields" class="mt-3" />
+  <Form class="mt-4" @submit.prevent="onSubmit">
+    <FormFields :form="form" :options="formFields" />
     <div class="mt-4 flex flex-col justify-end space-y-4">
       <Button
         color="warning"
@@ -18,8 +18,12 @@
 import * as z from 'zod'
 import {
   type IProductItem,
+  useProductBrandListLoader,
   useProductCategoryListLoader,
+  useProductGroupListLoader,
   useProductPageLoader,
+  useProductSubGroupListLoader,
+  useProductTypeListLoader,
 } from '~/loaders/product'
 import { INPUT_TYPES } from '#core/components/Form/types'
 import { useProductSyncLoader } from '~/loaders/import'
@@ -32,6 +36,42 @@ const props = defineProps<{
 const product = useProductPageLoader()
 const sync = useProductSyncLoader()
 const category = useProductCategoryListLoader()
+const brand = useProductBrandListLoader()
+const type = useProductTypeListLoader()
+const group = useProductGroupListLoader()
+const subGroup = useProductSubGroupListLoader()
+
+brand.setFetchLoading()
+type.setFetchLoading()
+group.setFetchLoading()
+subGroup.setFetchLoading()
+
+onMounted(() => {
+  brand.fetch(1, '', {
+    params: {
+      limit: 9999,
+    },
+  })
+
+  type.fetch(1, '', {
+    params: {
+      limit: 9999,
+    },
+  })
+
+  group.fetch(1, '', {
+    params: {
+      limit: 9999,
+    },
+  })
+
+  subGroup.fetch(1, '', {
+    params: {
+      limit: 9999,
+    },
+  })
+})
+
 const form = useForm({
   validationSchema: toTypedSchema(
     z.object({
@@ -42,6 +82,10 @@ const form = useForm({
       price_plus: z.number().optional(),
       qty: z.number().optional(),
       category_id: z.number().optional().nullable(),
+      brand_id: z.number().optional().nullable(),
+      type_id: z.number().optional().nullable(),
+      group_id: z.number().optional().nullable(),
+      sub_group_id: z.number().optional().nullable(),
     })
   ),
   initialValues: props.item,
@@ -57,6 +101,58 @@ const formFields = createFormFields(() => [
         label: item.name,
         value: item.id,
       })),
+      clearable: true,
+    },
+  },
+  {
+    type: INPUT_TYPES.SELECT,
+    props: {
+      name: 'brand_id',
+      label: 'แบรนด์',
+      options: brand.fetchItems.map((item) => ({
+        label: item.name,
+        value: item.id,
+      })),
+      loading: brand.fetchStatus.isLoading,
+      clearable: true,
+    },
+  },
+  {
+    type: INPUT_TYPES.SELECT,
+    props: {
+      name: 'type_id',
+      label: 'ประเภท',
+      options: type.fetchItems.map((item) => ({
+        label: item.name,
+        value: item.id,
+      })),
+      loading: type.fetchStatus.isLoading,
+      clearable: true,
+    },
+  },
+  {
+    type: INPUT_TYPES.SELECT,
+    props: {
+      name: 'group_id',
+      label: 'กลุ่ม',
+      options: group.fetchItems.map((item) => ({
+        label: item.name,
+        value: item.id,
+      })),
+      loading: group.fetchStatus.isLoading,
+      clearable: true,
+    },
+  },
+  {
+    type: INPUT_TYPES.SELECT,
+    props: {
+      name: 'sub_group_id',
+      label: 'กลุ่มย่อย',
+      options: subGroup.fetchItems.map((item) => ({
+        label: item.name,
+        value: item.id,
+      })),
+      loading: subGroup.fetchStatus.isLoading,
       clearable: true,
     },
   },

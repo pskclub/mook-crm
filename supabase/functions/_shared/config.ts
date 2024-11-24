@@ -23,6 +23,27 @@ export interface IProductItem {
     name: string
     path: string
   }>
+  category_id: number
+  brand_id: number
+  product_brands: {
+    id: number
+    name: string
+  }
+  type_id: number
+  product_types: {
+    id: number
+    name: string
+  }
+  group_id: number
+  product_groups: {
+    id: number
+    name: string
+  }
+  sub_group_id: number
+  product_sub_groups: {
+    id: number
+    name: string
+  }
 }
 
 export interface IProductOriginItem {

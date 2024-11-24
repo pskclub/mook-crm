@@ -74,7 +74,7 @@ const supabase = useSupabaseClient()
 const session = useSupabaseSession()
 const router = useRouter()
 
-const navbarItems = [routes.home, routes.categories]
+const navbarItems = [routes.home, routes.categories, routes.brands, routes.groups, routes.types]
 
 const userItems: DropdownItem[][] = [
   [

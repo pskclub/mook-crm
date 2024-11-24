@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="isShowViewModal" size="lg" :title="item.name">
+  <Modal v-model="isShowViewModal" size="lg" :title="item.name" :overlay="false">
     <div v-if="item.detail" class="mb-4">
       <p class="break-words text-xs text-gray-600 dark:text-gray-400">
         {{ item.detail }}
@@ -12,6 +12,27 @@
         label="หมวดหมู่"
         :value="item.product_categories?.name"
       />
+      <KeyValueDisplay
+        v-if="item.product_brands"
+        label="แบรนด์"
+        :value="item.product_brands?.name"
+      />
+      <KeyValueDisplay
+        v-if="item.product_groups"
+        label="กลุ่มสินค้า"
+        :value="item.product_groups?.name"
+      />
+      <KeyValueDisplay
+        v-if="item.product_types"
+        label="กลุ่มสินค้าย่อย"
+        :value="item.product_types?.name"
+      />
+      <KeyValueDisplay
+        v-if="item.product_sub_groups"
+        label="กลุ่มสินค้า(progression)"
+        :value="item.product_sub_groups?.name"
+      />
+
       <KeyValueDisplay label="ราคาขาย" :value="item.price" format-type="fixed" suffix="฿" />
 
       <KeyValueDisplay
