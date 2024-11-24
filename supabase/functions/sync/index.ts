@@ -10,7 +10,7 @@ import { corsHeaders } from '../_shared/cors.ts'
 import {
   SUPABASE_URL,
   SUPABASE_KEY,
-  SOURCE_API,
+  SOURCE_API_BY_ID,
   SOURCE_FILE_API,
   type IProductFileResponse,
   type IProductOriginItem,
@@ -48,70 +48,55 @@ const importProducts = async (q: string) => {
   try {
     // 1. Fetch data from source
     console.log('Fetching data from source...')
-    const response = await axios.post(SOURCE_API, {
-      KW: q, // Add any required parameters
+    const response = await axios.post(SOURCE_API_BY_ID, {
+      RID: q, // Add any required parameters
     })
 
-    const sourceProducts: IProductOriginItem[] = response.data
+    const sourceProducts: IProductOriginItem = response.data
 
     // 2. Transform and prepare data
     console.log('Transforming data...')
-    const transformedProducts = sourceProducts.map(transformProduct)
+    const transformedProducts = transformProduct(sourceProducts)
 
     // 3. Batch insert into Supabase
     console.log('Inserting data into Supabase...')
-    const BATCH_SIZE = 100
     const results = []
 
-    for (let i = 0; i < transformedProducts.length; i += BATCH_SIZE) {
-      const batch = transformedProducts.slice(i, i + BATCH_SIZE)
+    const { data, error } = await supabase.from('products').upsert(transformedProducts)
 
-      const { data, error } = await supabase.from('products').upsert(batch)
-
-      if (error) {
-        console.log(batch)
-
-        console.error(`Error in batch ${i / BATCH_SIZE + 1}:`, error)
-        throw error
-      }
-
-      results.push(data)
-      console.log(
-        `Processed batch ${i / BATCH_SIZE + 1} of ${Math.ceil(
-          transformedProducts.length / BATCH_SIZE
-        )}`
-      )
+    if (error) {
+      console.error('Error', error)
+      throw error
     }
 
-    for (const product of transformedProducts) {
-      try {
-        const { data } = await axios.post<IProductFileResponse[]>(SOURCE_FILE_API, {
-          RID: product.id, // Add any required parameters
-        })
+    results.push(data)
 
-        await supabase.from('product_files').upsert(
-          data.map(
-            (file) => ({
-              name: file.File.FileName,
-              path: file.File.RID,
-              product_id: product.id,
-            }),
-            {
-              onConflict: 'path', // Assuming code is unique
-              ignoreDuplicates: true,
-            }
-          )
+    try {
+      const { data } = await axios.post<IProductFileResponse[]>(SOURCE_FILE_API, {
+        RID: transformedProducts.id, // Add any required parameters
+      })
+
+      await supabase.from('product_files').upsert(
+        data.map(
+          (file) => ({
+            name: file.File.FileName,
+            path: file.File.RID,
+            product_id: transformedProducts.id,
+          }),
+          {
+            onConflict: 'path', // Assuming code is unique
+            ignoreDuplicates: true,
+          }
         )
-      } catch (e) {
-        console.error(`Error in batch ${product.id / BATCH_SIZE + 1}:`, e)
-      }
+      )
+    } catch (e) {
+      console.error(`Error ${transformedProducts.id}:`, e)
     }
 
     // 4. Return summary
     return {
-      total: transformedProducts.length,
-      batches: Math.ceil(transformedProducts.length / BATCH_SIZE),
-      items: transformedProducts,
+      total: 1,
+      item: transformedProducts,
       success: true,
     }
   } catch (error) {
@@ -168,9 +153,9 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { q } = await req.json()
+    const { id } = await req.json()
 
-    const result = await runImport(q)
+    const result = await runImport(id)
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

@@ -1,7 +1,15 @@
 <template>
   <Form @submit.prevent="onSubmit">
     <FormFields :form="form" :options="formFields" class="mt-3" />
-    <div class="mt-4 flex justify-end">
+    <div class="mt-4 flex flex-col justify-end space-y-4">
+      <Button
+        color="warning"
+        type="button"
+        block
+        :loading="sync.status.value.isLoading"
+        @click="onSync"
+        >Sync
+      </Button>
       <Button type="submit" block>บันทึก</Button>
     </div>
   </Form>
@@ -14,6 +22,7 @@ import {
   useProductPageLoader,
 } from '~/loaders/product'
 import { INPUT_TYPES } from '#core/components/Form/types'
+import { useProductSyncLoader } from '~/loaders/import'
 
 const emits = defineEmits(['done'])
 const props = defineProps<{
@@ -21,6 +30,7 @@ const props = defineProps<{
 }>()
 
 const product = useProductPageLoader()
+const sync = useProductSyncLoader()
 const category = useProductCategoryListLoader()
 const form = useForm({
   validationSchema: toTypedSchema(
@@ -58,7 +68,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 const dialog = useDialog()
 
-watch(
+useWatchTrue(
   () => product.updateStatus.value.isSuccess,
   () => {
     dialog.success({
@@ -71,12 +81,42 @@ watch(
   }
 )
 
-watch(
+useWatchTrue(
   () => product.updateStatus.value.isError,
   () => {
     dialog.error({
       title: 'เกิดข้อผิดพลาด',
       description: StringHelper.getError(product.updateStatus.value.errorData),
+    })
+  }
+)
+
+const onSync = async () => {
+  sync.run({
+    id: props.item.id,
+  })
+}
+
+useWatchTrue(
+  () => sync.status.value.isSuccess,
+  () => {
+    dialog
+      .success({
+        title: 'Sync สำเร็จ',
+        description: 'Sync สำเร็จ',
+      })
+      .then(() => {
+        emits('done')
+      })
+  }
+)
+
+useWatchTrue(
+  () => sync.status.value.isError,
+  () => {
+    dialog.error({
+      title: 'เกิดข้อผิดพลาด',
+      description: StringHelper.getError(sync.status.value.errorData),
     })
   }
 )
