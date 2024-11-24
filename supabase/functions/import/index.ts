@@ -175,6 +175,7 @@ const importProducts = async (q: string) => {
     return {
       total: transformedProducts.length,
       batches: Math.ceil(transformedProducts.length / BATCH_SIZE),
+      items: transformedProducts,
       success: true,
     }
   } catch (error) {
