@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="isShowViewModal" :title="item.name">
+  <Modal v-model="isShowViewModal" size="lg" :title="item.name">
     <div v-if="item.detail" class="mb-4">
       <p class="break-words text-xs text-gray-600 dark:text-gray-400">
         {{ item.detail }}
@@ -48,12 +48,14 @@
                 target="_blank"
                 :href="`https://crmur.10bitdevelopment.com/select2services/files/DownloadFile/${file.path}`"
                 class="text-primary-600 hover:text-primary-500 font-medium"
-                >ดาวน์โหลด</a
               >
+                ดาวน์โหลด
+              </a>
             </div>
           </li>
         </ul>
       </div>
+      <UpdateForm :item="item" @done="isShowViewModal = false" />
     </div>
 
     <!-- Creation Date -->
@@ -63,136 +65,17 @@
       </span>
     </div>
   </Modal>
-  <Modal v-model="isShowEditModal" :title="item.name">
-    <Form @submit.prevent="onSubmit">
-      <FormFields :form="form" :options="formFields" />
-      <div class="mt-4 flex justify-end">
-        <Button type="submit" block>แก้ไข</Button>
-      </div>
-    </Form>
-  </Modal>
   <div class="flex items-center space-x-3">
-    <Button icon="ph:note-pencil" square color="white" @click="isShowEditModal = true" />
     <Button icon="ph:eye" square color="white" @click="isShowViewModal = true" />
   </div>
 </template>
 <script lang="ts" setup>
-import {
-  type IProductItem,
-  useProductCategoryListLoader,
-  useProductPageLoader,
-} from '~/loaders/product'
-import * as z from 'zod'
-import { INPUT_TYPES } from '#core/components/Form/types'
+import { type IProductItem } from '~/loaders/product'
+import UpdateForm from '~/features/Home/UpdateForm.vue'
 
-const props = defineProps<{
+defineProps<{
   item: IProductItem
 }>()
 
 const isShowViewModal = ref(false)
-const isShowEditModal = ref(false)
-
-const product = useProductPageLoader()
-const category = useProductCategoryListLoader()
-const dialog = useDialog()
-
-const form = useForm({
-  validationSchema: toTypedSchema(
-    z.object({
-      name: z.string().min(1, 'กรุณากรอกชื่อ'),
-      detail: z.string().min(1, 'กรุณากรอกรายละเอียด'),
-      code: z.string().min(1, 'กรุณากรอกรหัสสินค้า'),
-      price: z.number().optional(),
-      price_plus: z.number().optional(),
-      qty: z.number().optional(),
-      category_id: z.number().optional().nullable(),
-    })
-  ),
-  initialValues: props.item,
-  keepValuesOnUnmount: true,
-})
-
-const formFields = createFormFields(() => [
-  {
-    type: INPUT_TYPES.TEXT,
-    props: {
-      name: 'name',
-      label: 'ชื่อ',
-    },
-  },
-  {
-    type: INPUT_TYPES.SELECT,
-    props: {
-      name: 'category_id',
-      label: 'หมวดหมู่',
-      options: category.fetchItems.map((item) => ({
-        label: item.name,
-        value: item.id,
-      })),
-      clearable: true,
-    },
-  },
-  {
-    type: INPUT_TYPES.TEXTAREA,
-    props: {
-      name: 'detail',
-      label: 'รายละเอียด',
-    },
-  },
-  {
-    type: INPUT_TYPES.TEXT,
-    props: {
-      name: 'code',
-      label: 'รหัสสินค้า',
-    },
-  },
-  {
-    type: INPUT_TYPES.NUMBER,
-    props: {
-      name: 'price',
-      label: 'ราคาขาย',
-    },
-  },
-  {
-    type: INPUT_TYPES.NUMBER,
-    props: {
-      name: 'price_plus',
-      label: 'ราคา+ค่าดำเนินการ',
-    },
-  },
-  {
-    type: INPUT_TYPES.NUMBER,
-    props: {
-      name: 'qty',
-      label: 'จำนวนคงเหลือ',
-    },
-  },
-])
-
-const onSubmit = form.handleSubmit(async (values) => {
-  product.update(props.item.id as any, values)
-})
-
-watch(
-  () => product.updateStatus.value.isSuccess,
-  () => {
-    dialog.success({
-      title: 'แก้ไขสำเร็จ',
-      description: 'แก้ไขสินค้าสำเร็จ',
-    })
-
-    product.fetch()
-    isShowEditModal.value = false
-  }
-)
-
-watch(
-  () => product.updateStatus.value.isError,
-  () => {
-    dialog.error({
-      title: 'เกิดข้อผิดพลาด',
-      description: StringHelper.getError(product.updateStatus.value.errorData),
-    })
-  }
-)
 </script>

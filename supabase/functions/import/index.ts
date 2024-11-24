@@ -6,6 +6,7 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts'
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 import axios from 'https://deno.land/x/axiod/mod.ts'
+import { corsHeaders } from '../_shared/cors.ts'
 
 const SITE = {
   TITLE: 'บริษัท อัพไรท์ ซิมมูเลชั่น จำกัด',
@@ -227,11 +228,24 @@ const runImport = async (q: string) => {
 }
 
 Deno.serve(async (req: Request) => {
-  const { q } = await req.json()
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
 
-  const result = await runImport(q)
+  try {
+    const { q } = await req.json()
 
-  return new Response(JSON.stringify(result), { headers: { 'Content-Type': 'application/json' } })
+    const result = await runImport(q)
+
+    return new Response(JSON.stringify(result), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 400,
+    })
+  }
 })
 
 /* To invoke locally:

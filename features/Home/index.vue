@@ -1,14 +1,15 @@
 <template>
   <div>
     <Modal v-model="isShowImportModal" title="นำเข้าข้อมูล">
-      <Import @done="isShowImportModal = false" />
+      <Import @done="onImportSuccess" />
     </Modal>
-    <Form class="my-6">
+    <Form class="my-6 flex items-center justify-between">
       <FormFields
         :form="filterForm"
         :options="filterFields"
         class="grid grid-cols-2 gap-4 md:grid-cols-4"
       />
+      <Button icon="ph:upload" @click="isShowImportModal = true"> นำเข้าข้อมูล </Button>
     </Form>
     <Table :options="tableOptions" @page-change="product.fetch">
       <template #action-data="{ row }">
@@ -85,6 +86,9 @@ const tableOptions = useTable({
       label: 'ชื่อ',
       key: 'name',
       sortable: true,
+      props: {
+        max: '60',
+      },
     },
     {
       label: 'หมวดหมู่',
@@ -123,4 +127,9 @@ watch(
   }, 500),
   { deep: true }
 )
+
+const onImportSuccess = () => {
+  product.fetch()
+  isShowImportModal.value = false
+}
 </script>

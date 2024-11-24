@@ -10,6 +10,7 @@ export interface IProductItem {
   price: number
   price_plus: number
   qty: number
+  category_id: number
   product_categories: {
     id: number
     name: string
