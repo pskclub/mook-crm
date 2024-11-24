@@ -5,7 +5,7 @@
         <div class="flex shrink-0 justify-center">
           <nuxt-link to="/" class="inline-flex">
             <span class="sr-only">Workflow</span>
-            <img class="h-12 w-auto" src="/images/logo.png" alt="" />
+            <img class="h-12 w-auto" src="/images/logo.jpg" alt="" />
           </nuxt-link>
         </div>
         <div class="py-16">
@@ -34,7 +34,7 @@
         <div class="flex shrink-0 justify-center">
           <nuxt-link to="/" class="inline-flex">
             <span class="sr-only">Workflow</span>
-            <img class="h-12 w-auto" src="/images/logo.png" alt="" />
+            <img class="h-12 w-auto" src="/images/logo.jpg" alt="" />
           </nuxt-link>
         </div>
         <div class="py-16">
@@ -59,7 +59,7 @@
       <main class="mx-auto flex w-full max-w-7xl grow flex-col justify-center px-4 sm:px-6 lg:px-8">
         <div class="flex shrink-0 justify-center">
           <nuxt-link to="/" class="inline-flex">
-            <img class="h-12 w-auto" src="/images/logo.png" alt="" />
+            <img class="h-12 w-auto" src="/images/logo.jpg" alt="" />
           </nuxt-link>
         </div>
         <div class="py-16">
