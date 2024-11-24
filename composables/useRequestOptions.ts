@@ -16,7 +16,7 @@ export const useRequestOptions = () => {
     const session = useSupabaseSession()
 
     return {
-      baseURL: config.public.baseAPI,
+      baseURL: SITE.BASE_API,
       headers: {
         Apikey: SITE.API_KEY,
         Authorization: `Bearer ${session.value?.access_token}`,
