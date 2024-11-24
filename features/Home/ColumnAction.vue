@@ -67,15 +67,55 @@
   </Modal>
   <div class="flex items-center space-x-3">
     <Button icon="ph:eye" square color="white" @click="isShowViewModal = true" />
+    <Button icon="ph:trash" square color="white" @click="onDelete" />
   </div>
 </template>
 <script lang="ts" setup>
-import { type IProductItem } from '~/loaders/product'
+import { type IProductItem, useProductPageLoader } from '~/loaders/product'
 import UpdateForm from '~/features/Home/UpdateForm.vue'
 
-defineProps<{
+const emits = defineEmits(['done'])
+const props = defineProps<{
   item: IProductItem
 }>()
 
 const isShowViewModal = ref(false)
+const dialog = useDialog()
+const product = useProductPageLoader()
+
+const onDelete = () => {
+  dialog
+    .warning({
+      title: 'ยืนยันการลบข้อมูล',
+      description: 'คุณต้องการลบข้อมูลนี้ใช่หรือไม่?',
+      isShowCancelBtn: true,
+    })
+    .then(() => {
+      product.remove(props.item.id as any)
+    })
+}
+
+useWatchTrue(
+  () => product.deleteStatus.value.isSuccess,
+  () => {
+    dialog
+      .success({
+        title: 'ลบสำเร็จ',
+        description: 'ลบข้อมูลสำเร็จ',
+      })
+      .then(() => {
+        emits('done')
+      })
+  }
+)
+
+useWatchTrue(
+  () => product.deleteStatus.value.isError,
+  () => {
+    dialog.error({
+      title: 'ลบไม่สำเร็จ',
+      description: StringHelper.getError(product.deleteStatus.value.errorData),
+    })
+  }
+)
 </script>

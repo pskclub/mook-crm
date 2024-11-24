@@ -144,6 +144,17 @@ export const createSupabaseAdapter = (
         headers: {},
         config,
       }
+    } else if (method.toLowerCase() === 'delete') {
+      // ObjectLoader case for PUT
+      result = await supabase.from(url.split('/')[1]).delete().eq('id', tableName)
+
+      return {
+        data: result.data?.[0] || null,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config,
+      }
     }
 
     throw new Error(`Unsupported method: ${method}`)

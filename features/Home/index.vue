@@ -13,7 +13,7 @@
     </Form>
     <Table :options="tableOptions" @page-change="product.fetch">
       <template #action-data="{ row }">
-        <ColumnAction :item="row" />
+        <ColumnAction :item="row" @done="product.fetch" />
       </template>
     </Table>
   </div>
