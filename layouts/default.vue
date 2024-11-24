@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full">
     <Log :data="user" />
-    <nav class="border-b border-gray-200 bg-white">
+    <nav class="bg-primary-400 border-b border-gray-200">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
           <div class="flex">
@@ -22,8 +22,8 @@
                 v-for="item in navbarItems"
                 :to="item.to"
                 class="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
-                active-class="border-primary text-gray-900"
-                inactive-class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                active-class="border-primary text-primary-800"
+                inactive-class="border-transparent text-white hover:border-primary-800 hover:text-primary-800"
               >
                 {{ item.name }}
               </ULink>
@@ -36,7 +36,7 @@
               :popper="{ placement: 'bottom-end' }"
             >
               <div class="flex items-center">
-                <p class="font-semibold">
+                <p class="text-white">
                   {{ user?.email }}
                 </p>
                 <Icon name="ph:caret-down-light" class="ml-2" />
@@ -45,7 +45,7 @@
             <div v-else>
               <ULink
                 :to="routes.login.to"
-                inactive-class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                inactive-class="border-transparent text-white hover:border-primary-800 hover:text-primary-800"
               >
                 เข้าสู่ระบบ
               </ULink>
