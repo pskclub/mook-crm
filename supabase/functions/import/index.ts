@@ -134,10 +134,7 @@ const importProducts = async (q: string) => {
     for (let i = 0; i < transformedProducts.length; i += BATCH_SIZE) {
       const batch = transformedProducts.slice(i, i + BATCH_SIZE)
 
-      const { data, error } = await supabase.from('products').upsert(batch, {
-        onConflict: 'code', // Assuming code is unique
-        ignoreDuplicates: true,
-      })
+      const { data, error } = await supabase.from('products').upsert(batch)
 
       if (error) {
         console.log(batch)
