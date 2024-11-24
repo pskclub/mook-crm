@@ -160,12 +160,18 @@ const importProducts = async (q: string) => {
           RID: product.id, // Add any required parameters
         })
 
-        await supabase.from('product_files').insert(
-          data.map((file) => ({
-            name: file.File.FileName,
-            path: file.File.RID,
-            product_id: product.id,
-          }))
+        await supabase.from('product_files').upsert(
+          data.map(
+            (file) => ({
+              name: file.File.FileName,
+              path: file.File.RID,
+              product_id: product.id,
+            }),
+            {
+              onConflict: 'path', // Assuming code is unique
+              ignoreDuplicates: true,
+            }
+          )
         )
       } catch (e) {
         console.error(`Error in batch ${product.id / BATCH_SIZE + 1}:`, e)
