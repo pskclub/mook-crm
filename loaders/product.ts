@@ -84,7 +84,7 @@ export const useProductPageLoader = () => {
         params: {
           select:
             '*,product_categories(*),product_files(*),product_brands(*),product_types(*),product_groups(*),product_sub_groups(*)',
-          order: 'created_at.desc',
+          order: 'id.desc',
         },
         adapter: createSupabaseAdapter(['name', 'code']),
       }
