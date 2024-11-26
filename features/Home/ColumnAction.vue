@@ -33,9 +33,16 @@
         :value="item.product_sub_groups?.name"
       />
 
-      <KeyValueDisplay label="ราคาขาย" :value="item.price" format-type="fixed" suffix="฿" />
+      <KeyValueDisplay
+        v-if="session?.access_token"
+        label="ราคาขาย"
+        :value="item.price"
+        format-type="fixed"
+        suffix="฿"
+      />
 
       <KeyValueDisplay
+        v-if="session?.access_token"
         label="ราคา+ค่าดำเนินการ"
         :value="item.price_plus"
         format-type="fixed"

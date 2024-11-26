@@ -80,41 +80,42 @@ const filterFields = createFormFields(() => [
 
 const tableOptions = useTable({
   repo: product,
-  columns: () => [
-    {
-      label: 'รหัส',
-      key: 'code',
-      sortable: true,
-    },
-    {
-      label: 'ชื่อ',
-      key: 'name',
-      sortable: true,
-      props: {
-        max: '60',
+  columns: () =>
+    [
+      {
+        label: 'รหัส',
+        key: 'code',
+        sortable: true,
       },
-    },
-    {
-      label: 'หมวดหมู่',
-      key: 'product_categories.name',
-      transform: (value, item) => item.product_categories?.name,
-    },
-    {
-      label: 'ราคา',
-      key: 'price',
-      sortable: true,
-      type: COLUMN_TYPES.NUMBER,
-    },
-    {
-      label: 'จำนวน',
-      key: 'qty',
-      sortable: true,
-      type: COLUMN_TYPES.NUMBER,
-    },
-    {
-      key: 'action',
-    },
-  ],
+      {
+        label: 'ชื่อ',
+        key: 'name',
+        sortable: true,
+        props: {
+          max: '60',
+        },
+      },
+      {
+        label: 'หมวดหมู่',
+        key: 'product_categories.name',
+        transform: (value, item) => item.product_categories?.name,
+      },
+      session?.value?.access_token && {
+        label: 'ราคา',
+        key: 'price',
+        sortable: true,
+        type: COLUMN_TYPES.NUMBER,
+      },
+      {
+        label: 'จำนวน',
+        key: 'qty',
+        sortable: true,
+        type: COLUMN_TYPES.NUMBER,
+      },
+      {
+        key: 'action',
+      },
+    ].filter((item) => !!item),
 })
 
 watch(
